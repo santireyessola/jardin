@@ -123,6 +123,28 @@
     chispasEn(el, n || 14, ['#2EE59D', '#FFFFFF', '#12B76A']);
   }
 
+  /* ---------- Instalación como app ---------- */
+  let promptInstalar = null;
+  const yaInstalada = () => matchMedia('(display-mode: standalone)').matches || navigator.standalone === true;
+  const esIOS = () => /iphone|ipad|ipod/i.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+  const dentroDeOtraPagina = () => { try { return window.top !== window; } catch (e) { return true; } };
+  window.addEventListener('beforeinstallprompt', e => {
+    e.preventDefault(); promptInstalar = e;
+    renderHoy();
+  });
+  window.addEventListener('appinstalled', () => {
+    promptInstalar = null; renderHoy(); aviso('¡Jardín quedó instalada!');
+  });
+  function bannerInstalar() {
+    if (yaInstalada() || dentroDeOtraPagina()) return '';
+    if (promptInstalar) return `<div class="bloque"><div class="instalar"><span class="ic">${IC.bajar}</span><span class="txt"><b>Instalar Jardín</b><small>Se abre como app, a pantalla completa y sin conexión</small></span><button type="button" class="btn" data-a="instalar">Instalar</button></div></div>`;
+    if (location.protocol !== 'https:') return '';
+    const pasos = esIOS()
+      ? 'Abrí esta página en <b>Safari</b>, tocá <b>Compartir</b> y elegí <b>Agregar a inicio</b>.'
+      : 'Si no aparece el botón, abrí esta página en <b>Chrome</b>, tocá el menú <b>⋮</b> y elegí <b>Instalar aplicación</b> o <b>Agregar a pantalla principal</b>.';
+    return `<div class="bloque"><div class="instalar"><span class="ic">${IC.bajar}</span><span class="txt"><b>Instalar Jardín</b><small>${pasos}</small></span></div></div>`;
+  }
+
   /* ---------- Hoy ---------- */
   function habitosDelDia(f, H) {
     const activos = D().habitos.filter(h => !h.fin);
@@ -179,7 +201,7 @@
       ${otros.length ? `<details ${abierto ? 'open' : ''}><summary>No tocan este día (${otros.length})</summary><div class="lista">${otros.map(h => filaHabito(h, f, H)).join('')}</div></details>` : ''}
       ${pausa.length ? `<p class="sub">En pausa: ${pausa.map(h => esc(h.nombre)).join(', ')}.</p>` : ''}`;
     const titulo = f === H ? 'Hoy' : f === M.sumarDias(H, -1) ? 'Ayer' : cap(fechaLarga(f));
-    el.innerHTML = `<div class="bloque">${tiraDias(f, H)}</div><div class="bloque pila"><div class="titulo-fila"><h2>${titulo}</h2>${tocan.length ? `<span class="sub num">${hechos} de ${tocan.length} hechos</span>` : ''}</div>${cuerpo}</div>`;
+    el.innerHTML = `${bannerInstalar()}<div class="bloque">${tiraDias(f, H)}</div><div class="bloque pila"><div class="titulo-fila"><h2>${titulo}</h2>${tocan.length ? `<span class="sub num">${hechos} de ${tocan.length} hechos</span>` : ''}</div>${cuerpo}</div>`;
     renderAnillo();
   }
 
@@ -483,6 +505,11 @@
   /* ---------- Eventos ---------- */
   const ACCIONES = {
     'tab': b => { diaSel = null; ir(b.dataset.v); },
+    'instalar': () => {
+      if (!promptInstalar) return;
+      promptInstalar.prompt();
+      promptInstalar.userChoice.then(r => { if (r.outcome === 'accepted') { promptInstalar = null; renderHoy(); } });
+    },
     'crear': () => abrirAsistente(null),
     'volver': () => ir(pestana),
     'ficha': b => ir('ficha', { id: b.dataset.id }),

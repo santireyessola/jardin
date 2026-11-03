@@ -2,6 +2,8 @@
   "name": "Jardín",
   "short_name": "Jardín",
   "description": "Hábitos que hacen crecer monstruos en tu jardín",
+  "id": "./",
+  "lang": "es-AR",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",

@@ -107,6 +107,16 @@ details>summary{cursor:pointer;font-weight:600;font-size:14px;color:var(--texto-
 .vacia{text-align:center;padding:12px 0;display:grid;gap:12px;justify-items:center}
 .vacia p{max-width:32ch}
 
+/* Instalar como app */
+.instalar{display:grid;grid-template-columns:44px minmax(0,1fr) auto;align-items:center;gap:12px;background:var(--marino);color:var(--blanco);border-radius:18px;padding:12px}
+.instalar .ic{width:44px;height:44px;border-radius:13px;background:#FFFFFF1F;display:grid;place-items:center}
+.instalar .ic svg{width:22px;height:22px}
+.instalar .txt{display:grid;gap:2px;min-width:0}
+.instalar b{font-weight:700;font-size:15px}
+.instalar small{color:#FFFFFFC7;font-size:12.5px;line-height:1.35}
+.instalar small b{color:var(--blanco);font-size:inherit;font-weight:700}
+.instalar .btn{width:auto;min-height:42px;padding:8px 16px;background:var(--verde);color:var(--blanco);font-size:14px;border-radius:13px}
+
 /* Barra inferior */
 .tabs{position:fixed;z-index:9;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:480px;background:#FFFFFFF2;backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-top:1px solid var(--linea);display:grid;grid-template-columns:repeat(5,minmax(0,1fr));align-items:center;padding:6px max(8px,env(safe-area-inset-right,0px)) calc(6px + env(safe-area-inset-bottom,0px)) max(8px,env(safe-area-inset-left,0px))}
 .tab{display:grid;justify-items:center;gap:3px;min-height:54px;align-content:center;color:#7C879A;font-size:11px;font-weight:600}

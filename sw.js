@@ -1,7 +1,7 @@
 /* Service worker del jardín: la app funciona offline.
    Los archivos propios se buscan primero en la red, para recibir actualizaciones,
    y caen al caché si no hay conexión. */
-const CACHE = 'jardin-v3';
+const CACHE = 'jardin-v4';
 const ARCHIVOS = ['./', './index.html', './estilos.css', './monstruos.js', './motor.js', './app.js', './manifest.webmanifest', './icon-192.png', './icon-512.png'];
 
 self.addEventListener('install', e => {
